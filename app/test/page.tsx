@@ -1,8 +1,7 @@
+import { auth } from "@/auth";
 import { db } from "@/lib/db";
-
 const Page = async () => {
   const test = await db.user.findMany();
-  console.log(test);
   return (
     <div>
       <h1>Test Page</h1>

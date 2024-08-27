@@ -3,6 +3,7 @@ import authConfig from "./auth.config";
 import { db } from "./lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { getUserById } from "./user";
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -24,7 +25,8 @@ export const {
     },
   },
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account }) {
+      if (account?.provider !== "credentials") return true;
       const existingUser = await getUserById(user.id);
       if (!existingUser || !existingUser.emailVerified) return false;
       return true;

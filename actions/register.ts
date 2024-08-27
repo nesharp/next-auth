@@ -4,7 +4,12 @@ import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { getUserByEmail } from "@/user";
-export const register = async (values: z.infer<typeof RegisterSchema>) => {
+import { generateVerificationToken } from "@/lib/tokens";
+import { RegisterResponse } from "./types";
+import { sendVerificationEmail } from "@/lib/mail";
+export const register = async (
+  values: z.infer<typeof RegisterSchema>
+): Promise<RegisterResponse> => {
   const validatedField = RegisterSchema.safeParse(values);
   if (!validatedField.success) {
     return {
@@ -28,6 +33,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   });
   console.log("User created");
   console.log(user);
+  const verification = await generateVerificationToken(email);
+  await sendVerificationEmail(email, verification.token);
   return {
     success: "Email sent",
   };

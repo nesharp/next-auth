@@ -18,7 +18,10 @@ import { Button } from "../ui/button";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-succcess";
 import { login } from "@/actions/login";
+import { useSearchParams } from "next/navigation";
 export const LoginForm = () => {
+  const searchParams = useSearchParams();
+  const urlError = searchParams.get("error") === "OAuthAccountNotLinked";
   const [isTransition, setTransition] = useTransition();
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
@@ -31,7 +34,7 @@ export const LoginForm = () => {
   });
   const onSubmit = (values: z.infer<typeof LoginSchema>) => {
     setError("");
-    setSuccess(""); 
+    setSuccess("");
     setTransition(() => {
       login(values).then((data) => {
         setError(data?.error || "");
