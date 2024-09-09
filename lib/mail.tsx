@@ -5,7 +5,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmationLink = `http://localhost:3000/auth/verify?token=${token}`;
   const emailResponse = await resend.emails.send({
     from: "onboarding@resend.dev",
-    to: [email],
+    to: email,
     subject: "Please verify your email",
     react: MessageTemplate({ link: confirmationLink }),
   });
@@ -13,29 +13,151 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     console.log("Error while sending email: ", emailResponse.error);
   }
 };
+export const sendPasswordResetEmail = async (email: string, token: string) => {
+  const resetLink = `http://localhost:3000/auth/change-password?token=${token}`;
+  const emailResponse = await resend.emails.send({
+    from: "onboarding@resend.dev",
+    to: email,
+    subject: "Reset your password",
+    react: PasswordResetTemplate({ link: resetLink }),
+  });
+  if (emailResponse.error) {
+    console.log("Error while sending email: ", emailResponse.error);
+  }
+};
+
+const PasswordResetTemplate = ({ link }: { link: string }) => {
+  return (
+    <div>
+      <div
+        style={{
+          maxWidth: "32rem",
+          margin: "2.5rem auto",
+          backgroundColor: "white",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          borderRadius: "0.5rem",
+        }}
+      >
+        <div style={{ padding: "1.5rem" }}>
+          <h1
+            style={{ fontSize: "1.5rem", fontWeight: "600", color: "#1F2937" }}
+          >
+            Reset Your Password
+          </h1>
+          <p style={{ color: "#4B5563", marginTop: "1rem" }}>Hi [User Name],</p>
+          <p style={{ color: "#4B5563", marginTop: "0.5rem" }}>
+            We received a request to reset your password. Please click the
+            button below to proceed with the reset.
+          </p>
+          <a href={link} style={{ display: "block", marginTop: "1.5rem" }}>
+            <button
+              style={{
+                width: "100%",
+                backgroundColor: "#2563EB",
+                color: "white",
+                padding: "0.5rem",
+                borderRadius: "0.5rem",
+                transition: "background-color 0.3s",
+                cursor: "pointer",
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#1D4ED8")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#2563EB")
+              }
+            >
+              Reset Password
+            </button>
+          </a>
+          <p
+            style={{
+              color: "#6B7280",
+              marginTop: "1rem",
+              fontSize: "0.875rem",
+            }}
+          >
+            If you did not request a password reset, you can safely ignore this
+            email.
+          </p>
+          <p
+            style={{
+              color: "#6B7280",
+              marginTop: "0.5rem",
+              fontSize: "0.875rem",
+            }}
+          >
+            Regards,
+            <br />
+            nesharp team
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 //TODO: move this to a separate file and change file extension to .ts
 const MessageTemplate = ({ link }: { link: string }) => {
   return (
     <div>
-      <div className="max-w-lg mx-auto bg-white shadow-md rounded-lg mt-10">
-        <div className="p-6">
-          <h1 className="text-2xl font-semibold text-gray-800">
+      <div
+        style={{
+          maxWidth: "32rem",
+          margin: "2.5rem auto",
+          backgroundColor: "white",
+          boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+          borderRadius: "0.5rem",
+        }}
+      >
+        <div style={{ padding: "1.5rem" }}>
+          <h1
+            style={{ fontSize: "1.5rem", fontWeight: "600", color: "#1F2937" }}
+          >
             Verify Your Email
           </h1>
-          <p className="text-gray-600 mt-4">Hi [User Name],</p>
-          <p className="text-gray-600 mt-2">
+          <p style={{ color: "#4B5563", marginTop: "1rem" }}>Hi [User Name],</p>
+          <p style={{ color: "#4B5563", marginTop: "0.5rem" }}>
             Thank you for signing up! Please click the button below to verify
             your email address.
           </p>
-          <a href={link} className="block mt-6">
-            <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors">
+          <a href={link} style={{ display: "block", marginTop: "1.5rem" }}>
+            <button
+              style={{
+                width: "100%",
+                backgroundColor: "#2563EB",
+                color: "white",
+                padding: "0.5rem",
+                borderRadius: "0.5rem",
+                transition: "background-color 0.3s",
+                cursor: "pointer",
+              }}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#1D4ED8")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#2563EB")
+              }
+            >
               Verify Email
             </button>
           </a>
-          <p className="text-gray-500 mt-4 text-sm">
+          <p
+            style={{
+              color: "#6B7280",
+              marginTop: "1rem",
+              fontSize: "0.875rem",
+            }}
+          >
             If you did not create an account, no further action is required.
           </p>
-          <p className="text-gray-500 mt-2 text-sm">
+          <p
+            style={{
+              color: "#6B7280",
+              marginTop: "0.5rem",
+              fontSize: "0.875rem",
+            }}
+          >
             Regards,
             <br />
             nesharp team

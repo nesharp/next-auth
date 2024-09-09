@@ -2,6 +2,8 @@ export enum AuthRoutes {
   LOGIN = "/auth/login",
   REGISTER = "/auth/register",
   ERROR = "/auth/error",
+  RESET = "/auth/reset",
+  CHANGE_PASSWORD = "/auth/change-password",
 }
 export enum PublicRoutes {
   HOME = "/",

@@ -9,7 +9,6 @@ export const LoginSchema = z.object({
   }),
 });
 
-
 export const RegisterSchema = z.object({
   fullName: z.string().min(1, {
     message: "Invalid username",
@@ -21,4 +20,8 @@ export const RegisterSchema = z.object({
     message: "Invalid password",
   }),
 });
-
+export const ResetSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address",
+  }),
+});

@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { verifyEmail } from "@/actions/verification";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-succcess";
+import { AuthRoutes } from "@/routes";
 export const VerificationForm: FC = () => {
   const [error, setError] = useState<string | undefined>();
   const [success, setSuccess] = useState<string | undefined>();
@@ -35,7 +36,7 @@ export const VerificationForm: FC = () => {
   return (
     <CardWrapper
       headerLabel="Confirm you'r email"
-      backButtonHref="/auth/login"
+      backButtonHref={AuthRoutes.LOGIN}
       backButtonLabel="Back to login"
     >
       <div className="flex items-center w-full justify-center">

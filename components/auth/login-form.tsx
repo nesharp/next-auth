@@ -1,5 +1,5 @@
 "use client";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { CardWrapper } from "./card-wrapper";
 import { LoginSchema } from "@/schemas/index";
 import { useState, useTransition } from "react";
@@ -19,6 +19,8 @@ import { FormError } from "../form-error";
 import { FormSuccess } from "../form-succcess";
 import { login } from "@/actions/login";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import { AuthRoutes } from "@/routes";
 export const LoginForm = () => {
   const searchParams = useSearchParams();
   const urlError = searchParams.get("error") === "OAuthAccountNotLinked";
@@ -36,16 +38,16 @@ export const LoginForm = () => {
     setError("");
     setSuccess("");
     setTransition(() => {
-      login(values).then((data) => {
-        setError(data?.error || "");
-        setSuccess(data?.success || "");
+      login(values).then((response) => {
+        setError(response.error || "");
+        setSuccess(response.success || "");
       });
     });
   };
   return (
     <CardWrapper
       headerLabel="Welcome back"
-      backButtonHref="/auth/register"
+      backButtonHref={AuthRoutes.REGISTER}
       backButtonLabel="Don`t have an account?"
       showSocialButtons
     >
@@ -83,6 +85,14 @@ export const LoginForm = () => {
                       placeholder="********"
                     />
                   </FormControl>
+                  <Button
+                    size="sm"
+                    variant="link"
+                    asChild
+                    className="px-0 font-normal"
+                  >
+                    <Link href={AuthRoutes.RESET}>Forgot password?</Link>
+                  </Button>
                   <FormMessage />
                 </FormItem>
               )}

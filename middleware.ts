@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import authConfig from "./auth.config";
 import {
+  AuthRoutes,
   DEFAULT_LOGIN_REDIRECT,
   apiAuthPrefix,
   authRoutes,
@@ -12,6 +13,7 @@ const { auth } = NextAuth(authConfig);
 export default auth((req) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
+  // TODO:fix typescript error
   const isApiAuthRoute = nextUrl.pathname.startsWith(apiAuthPrefix);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
@@ -25,7 +27,7 @@ export default auth((req) => {
     return null;
   }
   if (!isLoggedIn && !isPublicRoute) {
-    return Response.redirect(new URL("/auth/login", nextUrl));
+    return Response.redirect(new URL(AuthRoutes.LOGIN, nextUrl));
   }
   return null;
 });

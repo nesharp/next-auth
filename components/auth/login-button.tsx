@@ -1,5 +1,6 @@
 "use client";
 
+import { AuthRoutes } from "@/routes";
 import { useRouter } from "next/navigation";
 
 interface AuthButtonProps {
@@ -15,9 +16,9 @@ export const LoginButton = ({
 }: AuthButtonProps) => {
   const router = useRouter();
   const onClick = () => {
-    router.push("/auth/login");
+    router.push(AuthRoutes.LOGIN);
   };
-  if (mode === "modal") { 
+  if (mode === "modal") {
     return <span>TODO: Make modal</span>;
   }
   return (
