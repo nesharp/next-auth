@@ -4,6 +4,7 @@ import { db } from "./lib/db";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { getUserById } from "./user";
 import { AuthRoutes } from "./routes";
+import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 
 export const {
   handlers: { GET, POST },
@@ -30,6 +31,15 @@ export const {
       if (account?.provider !== "credentials") return true;
       const existingUser = await getUserById(user.id);
       if (!existingUser || !existingUser.emailVerified) return false;
+      if (existingUser.isTwoFactorEnabled) {
+        const confirmation = await getTwoFactorConfirmationByUserId(user.id);
+        if (!confirmation) return false;
+        await db.twoFactorConfirmation.delete({
+          where: {
+            id: confirmation.id,
+          },
+        });
+      }
       return true;
     },
     async session({ token, session }) {
